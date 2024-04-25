@@ -15,6 +15,7 @@ contract Election{
     }
     string public name;
     address private owner;
+    uint public maxVoteCount;
     mapping(address => Voter) public voters;
     Candidate[] public candidates;
     uint electionEnd;
@@ -52,6 +53,15 @@ contract Election{
         
         for(uint i=0;i<candidates.length;i++){
             emit ElectionResult(candidates[i].name,candidates[i].voteCount);
+        }
+    }
+
+    function winner() public {
+        require(msg.sender == owner);
+        for (uint i = 0; i < candidates.length; i++) {
+            if (candidates[i].voteCount == maxVoteCount) {
+                emit ElectionResult(candidates[i].name, candidates[i].voteCount);
+            }
         }
     }
     
